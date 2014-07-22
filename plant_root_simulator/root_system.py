@@ -8,16 +8,26 @@ class root_system:
 	def __init__(self, rootList):
 		self.roots = rootList
 		self.no_roots = len(rootList)
-		self.curr_step = 0
+		self.curr_step = 1
 
 	def step(self,step=1):
-		for i in range(0,self.no_roots):
-			rantmp = sp.random.random(1).squeeze()
-			self.roots[i].x[self.roots[i].apex+1] = rantmp
-			self.roots[i].y[self.roots[i].apex+1] = i	
-			print "Root nr " + str(i) + " updated! New position " + str(rantmp)
+		for s in range(0,step):
+			for r in range(0,self.no_roots):
+				if self.roots[r].max_steps > self.curr_step:
+					rantmp = sp.random.random(1).squeeze()
+					self.roots[r].x[self.roots[r].apex+1] = rantmp
+					self.roots[r].y[self.roots[r].apex+1] = self.roots[r].apex+1
+					self.roots[r].apex = self.roots[r].apex+1
+					print "Root nr " + str(r) + " updated! New position " + str(rantmp)
+				else:
+					print "Root nr " + str(r) + " has already finished"
+			self.curr_step +=1
+
 
 	def show_system(self):
+		pp.figure()
+		for r in range(0,self.no_roots):
+			pp.plot(self.roots[r].x, self.roots[r].y,'o')
 
 					
 
