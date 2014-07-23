@@ -4,7 +4,7 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 
-no_roots = 4
+no_roots = 5
 print "No of roots " + str(no_roots)
 
 rootSys = RS.root_system( no_roots, 1, 1 )

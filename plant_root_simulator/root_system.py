@@ -12,6 +12,7 @@ class root_system:
 		self.apexpos = list()
 		for i in range(0,no_roots):
 			start = i*self.distance # Random starting position -> sp.random.random(1)
+			print str(start)
 			v0 = 0
 			tmp_root = R.root(start, v0, 1000)
 			self.roots.append( tmp_root)
