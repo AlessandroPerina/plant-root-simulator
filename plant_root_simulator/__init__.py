@@ -1,6 +1,6 @@
-__all__ = ['root','simulator']
+__all__ = ['root','root_system']
 
 import root as R
 import numpy as np
 import scipy as sp
-from matplotlib import pyplot as pp
+from matplotlib import pyplot as plt
