@@ -43,7 +43,7 @@ class root_system:
 					print "Root nr " + str(r) + " has already finished"
 			self.curr_step +=1
 
-	def step_social(self,step=1,radius=0.5, k = 0.005, Ba = 0.4, Br = 0.43, alpha = 0.09, beta = 0.1 ):
+	def step_social(self,step=1, radius=0.1, k = 0.005, Ba = 0.4, Br = 0.43, alpha = 0.009, beta = 0.1 ):
 		for s in range(0,step):
 			for r in range(0,self.no_roots):
 				if self.roots[r].max_steps > self.curr_step:
@@ -63,24 +63,21 @@ class root_system:
 					distances[0,r] = np.inf
 					distances_sorted = np.sort( distances ).squeeze()
 					id_sorted = np.argsort( distances ).squeeze()
-					for nr in range(0,2):
+					for nr in range(0,N):
 						ua =  self.apexpos[r][0] - self.apexpos[id_sorted[nr]][0]
 						if ua > 0:
-							ua = 1
-						else:
 							ua = -1
-						Fa += Ba*math.exp( - alpha*distances_sorted[nr]**2)*ua
+						else:
+							ua = 1
+						Fa += Ba*math.exp( - alpha*(distances_sorted[nr]**2))*ua
 						
 						ur = self.apexpos[r][0] - self.apexpos[id_sorted[nr]][0] 
 						if ur > 0:
-							ur = 1
-						else:
 							ur = -1
-						Fr += -Br*math.exp( - beta*distances_sorted[nr]**2)*ur
+						else:
+							ur = 1
+						Fr += -Br*math.exp( - beta*(distances_sorted[nr]**2))*ur
 						
-						print str(Fa)
-						if Fa == 0 and Fr == 0:
-							break
 
 					delta_theta = ( sp.random.random(1)*self.eta - (self.eta/2) )
 					theta = math.pi/2 + delta_theta + ntheta
@@ -93,7 +90,7 @@ class root_system:
 					S = np.eye(2)
 					S[0,0]= sp.random.choice([-1,1],1,1,[0.5,0.5])
 					movement = np.dot( S, v + delta_v ) 
-					# movement[0] = Fa + Fr
+					movement[0] = Fa + Fr
 
 					self.roots[r].v[0,self.roots[r].apex+1] = v[0] + delta_v[0]
 					self.roots[r].v[1,self.roots[r].apex+1] = v[1] + delta_v[1]

@@ -13,7 +13,7 @@ d = 0.6
 delta_r = 0.1
 rootSys = RS.root_system( no_roots, d, delta )
 #rootSys.step_random(100)
-rootSys.step_social(100, delta_r)
+rootSys.step_social(1000, delta_r)
 
 print "Displaying root system"
 rootSys.show_system()
