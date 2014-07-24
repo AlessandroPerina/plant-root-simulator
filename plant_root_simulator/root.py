@@ -2,6 +2,7 @@ import root as R
 import numpy as np
 import scipy as sp
 from matplotlib import pyplot as pp
+import math
 
 class root:
 
@@ -11,7 +12,8 @@ class root:
 		self.s = np.zeros([2,max_steps])
 		self.s[:,0] = [pos,0]
 		self.v = np.zeros([2,max_steps])
-		self.theta = np.zeros([max_steps])
+		self.theta = np.ones([max_steps])
+		self.theta[0] = math.pi/2 
 		self.apex = 0 # Posizione dell'apice
 		self.max_steps = max_steps
 
