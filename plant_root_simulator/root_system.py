@@ -16,7 +16,7 @@ class root_system:
 		for i in range(0,no_roots):
 			start = i*self.distance # Random starting position -> sp.random.random(1)
 			print str(start)
-			v0 = 0.7
+			v0 = 0.1
 			tmp_root = R.root(start, v0, 1000)
 			self.roots.append( tmp_root)
 			self.apexpos.append( np.array([self.roots[i].s[0,0],self.roots[i].s[1,0]]) )
@@ -43,7 +43,7 @@ class root_system:
 					print "Root nr " + str(r) + " has already finished"
 			self.curr_step +=1
 
-	def step_social(self,step=1,radius=0.5, k = 0.005):
+	def step_social(self,step=1,radius=0.5, k = 0.005, Ba = 0.4, Br = 0.43, alpha = 0.09, beta = 0.1 ):
 		for s in range(0,step):
 			for r in range(0,self.no_roots):
 				if self.roots[r].max_steps > self.curr_step:
@@ -61,25 +61,25 @@ class root_system:
 						ntheta = math.atan( msin / mcos )
 
 					delta_theta = ( sp.random.random(1)*self.eta - (self.eta/2) )
-					theta = delta_theta + ntheta
+					theta = math.pi/2 + delta_theta + ntheta
 					theta_adjusted_gravity = theta + k*(math.pi/2 - theta )
 					self.roots[r].theta[self.roots[r].apex+1] = theta_adjusted_gravity
 					delta_v = sp.random.random(2)*self.delta
+
 					v = np.array( [math.cos(theta_adjusted_gravity),math.sin(theta_adjusted_gravity)] )*self.roots[r].v0
 					
-					#S = np.eye(2)
-					#S[0,0]= sp.random.choice([-1,1],1,1,[0.5,0.5])
-					#movement = np.dot( S, v + delta_v )
+					S = np.eye(2)
+					S[0,0]= sp.random.choice([-1,1],1,1,[0.5,0.5])
+					movement = np.dot( S, v + delta_v )
 
 					self.roots[r].v[0,self.roots[r].apex+1] = v[0] + delta_v[0]
 					self.roots[r].v[1,self.roots[r].apex+1] = v[1] + delta_v[1]
 
-					movement = v + delta_v
+					#movement = v + delta_v
 					self.roots[r].s[0,self.roots[r].apex+1] = self.roots[r].s[0,self.roots[r].apex] + movement[0]
 					self.roots[r].s[1,self.roots[r].apex+1] = self.roots[r].s[1,self.roots[r].apex] - movement[1]
-
-					self.roots[r].apex = self.roots[r].apex+1
 					self.apexpos[r] = np.array([self.roots[r].s[0,self.roots[r].apex+1],self.roots[r].s[1,self.roots[r].apex+1]])
+					self.roots[r].apex = self.roots[r].apex+1
 				else:
 					print "Root nr " + str(r) + " has already finished"
 			self.curr_step +=1

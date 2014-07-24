@@ -10,7 +10,7 @@ no_roots = 33
 print "No of roots " + str(no_roots)
 delta = 0.05
 d = 0.6
-delta_r = 0.5
+delta_r = 0.1
 rootSys = RS.root_system( no_roots, d, delta )
 #rootSys.step_random(100)
 rootSys.step_social(100, delta_r)
