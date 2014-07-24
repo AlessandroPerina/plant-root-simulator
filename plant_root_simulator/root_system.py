@@ -50,7 +50,7 @@ class root_system:
 					pos = self.roots[r].s[:,self.roots[r].apex].squeeze()
 					distances = np.array(((pos - np.array( self.apexpos) )**2).sum(1)[None] )**0.5
 					neighborhood = map( self.roots.__getitem__, find( distances < radius)) 
-					msin, mcos = 0,0
+					msin, mcos, Fa, Fr = 0,0,0,0
 					N = len(neighborhood)
 					if N > 0:
 						for nr in range(0,N):
@@ -59,6 +59,28 @@ class root_system:
 						msin /= N
 						mcos /= N						
 						ntheta = math.atan( msin / mcos )
+
+					distances[0,r] = np.inf
+					distances_sorted = np.sort( distances ).squeeze()
+					id_sorted = np.argsort( distances ).squeeze()
+					for nr in range(0,2):
+						ua =  self.apexpos[r][0] - self.apexpos[id_sorted[nr]][0]
+						if ua > 0:
+							ua = 1
+						else:
+							ua = -1
+						Fa += Ba*math.exp( - alpha*distances_sorted[nr]**2)*ua
+						
+						ur = self.apexpos[r][0] - self.apexpos[id_sorted[nr]][0] 
+						if ur > 0:
+							ur = 1
+						else:
+							ur = -1
+						Fr += -Br*math.exp( - beta*distances_sorted[nr]**2)*ur
+						
+						print str(Fa)
+						if Fa == 0 and Fr == 0:
+							break
 
 					delta_theta = ( sp.random.random(1)*self.eta - (self.eta/2) )
 					theta = math.pi/2 + delta_theta + ntheta
@@ -70,7 +92,8 @@ class root_system:
 					
 					S = np.eye(2)
 					S[0,0]= sp.random.choice([-1,1],1,1,[0.5,0.5])
-					movement = np.dot( S, v + delta_v )
+					movement = np.dot( S, v + delta_v ) 
+					# movement[0] = Fa + Fr
 
 					self.roots[r].v[0,self.roots[r].apex+1] = v[0] + delta_v[0]
 					self.roots[r].v[1,self.roots[r].apex+1] = v[1] + delta_v[1]
