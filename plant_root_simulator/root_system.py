@@ -28,7 +28,10 @@ class root_system:
 
 	def step_random(self,step=1):
 		for s in range(0,step):
-			for r in range(0,self.no_roots):
+			iter_list = self.roots()
+			np.random.shuffle(iter_list)
+			for r in iter_list:
+    		  #range(0,self.no_roots):
 				if self.roots[r].max_steps > self.curr_step:
 					S = np.eye(2)
 					S[0,0]= sp.random.choice([-1,1],1,1,[0.5,0.5])
@@ -41,7 +44,8 @@ class root_system:
 					self.apexpos[r] = np.array( self.roots[r].s[:,self.roots[r].apex+1] ).squeeze()
 				else:
 					print "Root nr " + str(r) + " has already finished"
-			self.curr_step +=1
+
+			self.curr_step += 1
 
 	def step_social(self,step=1, radius=0.1, k = 0.005, Ba = 0.4, Br = 0.43, alpha = 0.009, beta = 0.1 ):
 		for s in range(0,step):
@@ -66,16 +70,16 @@ class root_system:
 					for nr in range(0,N):
 						ua =  self.apexpos[r][0] - self.apexpos[id_sorted[nr]][0]
 						if ua > 0:
-							ua = -1
-						else:
 							ua = 1
+						else:
+							ua = -1
 						Fa += Ba*math.exp( - alpha*(distances_sorted[nr]**2))*ua
 						
 						ur = self.apexpos[r][0] - self.apexpos[id_sorted[nr]][0] 
 						if ur > 0:
-							ur = -1
-						else:
 							ur = 1
+						else:
+							ur = -1
 						Fr += -Br*math.exp( - beta*(distances_sorted[nr]**2))*ur
 						
 
